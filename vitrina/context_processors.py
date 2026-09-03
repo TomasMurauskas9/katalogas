@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.sites.models import Site
 
 
@@ -8,4 +9,11 @@ def current_domain(request):
     return {
         "current_domain_full": url,
         "current_domain": domain,
+    }
+
+
+def portal_config(request):
+    return {
+        "PORTAL_TITLE": getattr(settings, "PORTAL_TITLE", "Atvirų duomenų katalogas"),
+        "PORTAL_LOGO":  getattr(settings, "PORTAL_LOGO", ""),
     }

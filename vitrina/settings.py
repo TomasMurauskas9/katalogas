@@ -48,23 +48,23 @@ SECRET_KEY = env(
     default=("django-insecure-((hv!%qj6+p@)vnuy6%(@l#0m=n*o@dy3sn3sop0m$!49^*xvy"),
 )
 
-VIISP_AUTHORIZE_URL = env("VIISP_AUTHORIZE_URL")
-VIISP_PROXY_AUTH = env("VIISP_PROXY_AUTH")
-VIISP_PID = env("VIISP_PID")
+VIISP_AUTHORIZE_URL = env("VIISP_AUTHORIZE_URL", default="")
+VIISP_PROXY_AUTH = env("VIISP_PROXY_AUTH", default="")
+VIISP_PID = env("VIISP_PID", default="")
 
 OAUTH_SERVER_PUBLIC_JWK_JSON = json.loads(env("OAUTH_SERVER_PUBLIC_JWK_JSON", default="{}"))
 OAUTH_SERVER_PUBLIC_JWK_DOWNLOAD_PATH = env("OAUTH_SERVER_PUBLIC_JWK_DOWNLOAD_PATH", default="")
 OAUTH_SERVER_PUBLIC_JWK_DOWNLOAD_CACHE_TIMEOUT = int(
     env("OAUTH_SERVER_PUBLIC_JWK_DOWNLOAD_CACHE_TIMEOUT", default=7 * 24 * 60 * 60)
 )  # in seconds. Default - one week.
-OAUTH_SERVER_HOST = env("OAUTH_SERVER_HOST")
+OAUTH_SERVER_HOST = env("OAUTH_SERVER_HOST", default="")
 OAUTH_SERVER_CLIENTS_PATH = env("OAUTH_SERVER_CLIENTS_PATH", default="/auth/clients")
 OAUTH_SERVER_TOKEN_PATH = env("OAUTH_SERVER_TOKEN_PATH", default="/auth/token")
 OAUTH_SERVER_CLIENTS_URL = OAUTH_SERVER_HOST + OAUTH_SERVER_CLIENTS_PATH
 OAUTH_SERVER_TOKEN_URL = OAUTH_SERVER_HOST + OAUTH_SERVER_TOKEN_PATH
 OAUTH_SERVER_PUBLIC_JWK_DOWNLOAD_URL = OAUTH_SERVER_HOST + OAUTH_SERVER_PUBLIC_JWK_DOWNLOAD_PATH
-OAUTH_CLIENT_SECRET = env("OAUTH_CLIENT_SECRET")
-OAUTH_CLIENT_NAME = env("OAUTH_CLIENT_NAME")
+OAUTH_CLIENT_SECRET = env("OAUTH_CLIENT_SECRET", default="")
+OAUTH_CLIENT_NAME = env("OAUTH_CLIENT_NAME", default="")
 OAUTH_CLIENT_SECRET_BASE64 = base64.b64encode(f"{OAUTH_CLIENT_NAME}:{OAUTH_CLIENT_SECRET}".encode()).decode()
 OAUTH_CLIENTS_MANAGEMENT_SCOPE = env("OAUTH_CLIENTS_MANAGEMENT_SCOPE", default="spinta_auth_clients")
 OAUTH_AGENT_DEFAULT_SCOPES = (
@@ -84,6 +84,14 @@ OAUTH_AGENT_DEFAULT_SCOPES = (
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
+
+# Portalo pavadinimas — keičiamas per env kintamąjį kiekvienai instancijai.
+# Atvirų duomenų katalogas: default (nenustatant env)
+# Valstybės IS katalogas: PORTAL_TITLE="Valstybės informacinių sistemų duomenų katalogas"
+PORTAL_TITLE = env("PORTAL_TITLE", default="Atvirų duomenų katalogas")
+# Logotipo SVG failas (pilnas path nuo STATIC_ROOT, pvz. img/landing/ladp.svg).
+# Tuščia reikšmė rodo PORTAL_TITLE tekstą vietoje logotipo SVG.
+PORTAL_LOGO = env("PORTAL_LOGO", default="img/landing/katalogas.svg")
 
 IS_DEV_FEATURES_ENABLED = env("IS_DEV_FEATURES_ENABLED", default=False)
 
@@ -233,6 +241,7 @@ TEMPLATES = [
                 "sekizai.context_processors.sekizai",
                 "cms.context_processors.cms_settings",
                 "vitrina.context_processors.current_domain",
+                "vitrina.context_processors.portal_config",
             ],
         },
     },

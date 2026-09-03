@@ -4,6 +4,9 @@ from django.db.models import QuerySet
 from django.db.utils import IntegrityError
 from django.http import HttpRequest
 from django.http import HttpResponse
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_safe
 from django.templatetags.static import static
 from django.utils import timezone
 from django.apps import apps
@@ -58,6 +61,8 @@ from vitrina.structure.services import (
     create_or_get_uapi_format,
 )
 from vitrina.tasks.models import Task
+from vitrina.orgs.models import Organization
+from vitrina.projects.services import get_projects
 
 CATALOG_TAG = "Catalogs"
 CATEGORY_TAG = "Categories"
@@ -784,3 +789,39 @@ def edp_dcat_ap_rdf(request: HttpRequest) -> HttpResponse:
 
 def edp_dcat_ap_restricted_rdf(request: HttpRequest) -> HttpResponse:
     return render_rdf_response(request, Dataset.edp_restricted.all())
+
+
+@csrf_exempt
+@require_safe
+def restricted_data_stats(request: HttpRequest) -> JsonResponse:
+    # TODO: kai bus sukurtas DBSIS modelis, pakeisti į tikras DB užklausas.
+    # Šiuo metu grąžina visų (ne tik viešų) išteklių skaičių iš bendros DB.
+    from vitrina.datasets.models import Dataset as _Dataset
+    from vitrina.orgs.models import Organization as _Org
+    response = JsonResponse({
+        "organizations": _Org.objects.count(),
+        "datasets": _Dataset.objects.filter(
+            deleted__isnull=True,
+            deleted_on__isnull=True,
+        ).count(),
+        "projects": get_projects(request.user, approved_only=False).count(),
+    })
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Cache-Control"] = "public, max-age=300"
+    return response
+
+
+@csrf_exempt
+@require_safe
+def open_data_stats(request: HttpRequest) -> JsonResponse:
+    response = JsonResponse({
+        "organizations": Organization.public.count(),
+        "datasets": Dataset.restricted.for_user(request.user).count(),
+        "projects": get_projects(request.user, approved_only=False).count(),
+    })
+    # Atvirieji statistiniai duomenys — leidžiama iš bet kurio origin'o.
+    # Produkcijoje susiaurinti iki konkretaus domeno, pvz.: "https://data.gov.lt"
+    response["Access-Control-Allow-Origin"] = "*"
+    # Statistika nesikeičia dažniau nei kas kelias minutes — 5 min. klientų kešas
+    response["Cache-Control"] = "public, max-age=300"
+    return response

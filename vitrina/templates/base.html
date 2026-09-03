@@ -13,22 +13,22 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Lietuvos atvirų duomenų portalas{% block pageTitle %}{% endblock %}</title>
+    <title>{{ PORTAL_TITLE }}{% block pageTitle %}{% endblock %}</title>
     <meta name="description"
-          content="{% block pageDescription %}Atvirų duomenų portalas - tai vieningas prieigos taškas prie visų Lietuvoje atvertų duomenų rinkinių ir suteikiantis technologines priemones atvirų duomenų teikėjams parengti ir publikuoti atvertų duomenų rinkinių metaduomenis.{% endblock %}">
+          content="{% block pageDescription %}{{ PORTAL_TITLE }} — vieningas prieigos taškas prie Lietuvos valstybės duomenų.{% endblock %}">
     <meta name="keywords"
-          content="{% block pageKeywords %}atviri duomenys, duomenų rinkiniai, atvirų duomenų portalas{% endblock %}">
+          content="{% block pageKeywords %}atviri duomenys, duomenų rinkiniai, katalogas{% endblock %}">
     <meta name="author" content="{% block pageAuthor %}Valstybės skaitmeninių sprendimų agentūra{% endblock %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta property="og:title" content="Lietuvos atvirų duomenų portalas{% block pageOgTitle %}{% endblock %}"/>
+    <meta property="og:title" content="{{ PORTAL_TITLE }}{% block pageOgTitle %}{% endblock %}"/>
     <meta property="og:type" content="{% block pageOgType %}website{% endblock %}"/>
     <meta property="og:description"
-          content="{% block pageOgDescription %}Atvirų duomenų portalas - tai vieningas prieigos taškas prie visų Lietuvoje atvertų duomenų rinkinių ir suteikiantis technologines priemones atvirų duomenų teikėjams parengti ir publikuoti atvertų duomenų rinkinių metaduomenis.{% endblock %}"/>
+          content="{% block pageOgDescription %}{{ PORTAL_TITLE }} — vieningas prieigos taškas prie Lietuvos valstybės duomenų.{% endblock %}"/>
 
     <link type="text/css" href="{% static 'css/bundle.css' %}" rel="stylesheet" media="screen">
     <link type="text/css" href="{% static 'css/csp-utilities.css' %}" rel="stylesheet" media="screen">
-    <link rel="preload" href="{% static 'img/landing/ladp.svg' %}" as="image">
+    {% if PORTAL_LOGO %}<link rel="preload" href="{% static PORTAL_LOGO %}" as="image">{% endif %}
     <link rel="preload" href="{% static 'img/landing/bg.webp' %}" as="image">
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <script defer src="{% static 'js/bundle.js' %}"></script>

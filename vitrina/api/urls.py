@@ -21,6 +21,8 @@ from vitrina.api.views import (
     edp_dcat_ap_restricted_rdf,
     TaskViewSet,
     DistributionCreateAfterUploadToStorage,
+    open_data_stats,
+    restricted_data_stats,
 )
 
 router = DefaultRouter(trailing_slash=False)
@@ -147,4 +149,6 @@ urlpatterns = [
         edp_dcat_ap_restricted_rdf,
         name="edp-dcat-ap-restricted-rdf",
     ),
+    path("public/api/1/stats/open", open_data_stats, name="api-stats-open"),
+    path("public/api/1/stats/restricted", restricted_data_stats, name="api-stats-restricted"),
 ]

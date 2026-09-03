@@ -7,26 +7,30 @@
                 <img class="u-bg-cover" src="{% static 'img/landing/bg.webp' %}" alt="Background Image">
             <div class="columns">
                 <div id="adp-landing-logo" class="column is-6">
-                    <img src="{% static 'img/landing/ladp.svg' %}" alt="header" fetchpriority="high"/>
+                    {% if PORTAL_LOGO %}
+                        <img src="{% static PORTAL_LOGO %}" alt="{{ PORTAL_TITLE }}" style="max-width:500px;height:auto" fetchpriority="high"/>
+                    {% else %}
+                        <h1 class="title has-text-white" style="font-size:2.4rem;text-transform:uppercase;letter-spacing:.08em;margin-top:1.5rem">{{ PORTAL_TITLE }}</h1>
+                    {% endif %}
                 </div>
                 <div class="column">
                     <div id="adp-landing-numbers" class="columns is-gappless">
                         <div class="column has-text-centered is-3">
                             <a href="{% url 'organization-list' %}" id="organization-count" class="has-text-white stats">
                                 <span class="is-size-2 has-text-weight-bold">{{ counts.organization }}</span><br>
-                                <span class=" has-text-weight-bold">{% translate "Organizacijos" %}</span>
+                                <span class="has-text-weight-bold">{% translate "Organizacijos" %}</span>
                             </a>
                         </div>
                         <div class="column has-text-centered is-3">
                             <a href="{% url 'dataset-list' %}" id="dataset-count" class="has-text-white stats">
                                 <span class="is-size-2 has-text-weight-bold">{{ counts.dataset }}</span><br>
-                                <span class=" has-text-weight-bold">{% translate "Duomenų ištekliai" %}</span>
+                                <span class="has-text-weight-bold">{% translate "Duomenų ištekliai" %}</span>
                             </a>
                         </div>
                         <div class="column has-text-centered is-3">
                             <a href="{% url 'project-list' %}" id="request-count" class="has-text-white stats">
                                 <span class="is-size-2 has-text-weight-bold">{{ counts.project }}</span><br>
-                                <span class=" has-text-weight-bold">{% translate "Panaudojimo atvejai" %}</span>
+                                <span class="has-text-weight-bold">{% translate "Panaudojimo atvejai" %}</span>
                             </a>
                         </div>
                     </div>

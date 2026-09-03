@@ -185,6 +185,8 @@ class Filter:
 
     def length(self):
         fields = self.fields
+        if not fields:
+            return 0
         facet = fields[self.name]
         return len(facet)
 
@@ -305,6 +307,8 @@ class DateFilter(Filter):
 
     def items(self):
         fields = self.fields
+        if not fields:
+            return
         date_facet = fields[self.name]
 
         date_from = self.form.cleaned_data.get("date_from")
